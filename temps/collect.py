@@ -5,6 +5,7 @@ import zipfile
 import tkinter as tk
 from tkinter import ttk, messagebox
 import math
+from threading import Thread
 
 domain = "https://lmcodequestacademy.com"
 
@@ -171,10 +172,19 @@ def main():
     scope, filters = get_range_and_checkboxes(page_count)
     filters = [filterToValue(filter) for filter in filters]
 
+    threads: list[Thread] = []
+
     for i in range(scope[0], scope[1] + 1):
         page = grabPage(difficulty=filters, page=i)
         problems = page["problems"]
-        for problem in problems: setupProblem(problem)
+        if len(problems) == 0: break
+        for problem in problems:
+            thread = Thread(target=setupProblem, args=(problem,))
+            thread.start()
+            threads.append(thread)
+
+    for thread in threads:
+        thread.join()
 
 if __name__ == "__main__":
     main()
