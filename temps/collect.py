@@ -96,7 +96,7 @@ def get_range_and_checkboxes(maximum: int):
     
     ttk.Label(frame_range, text="Max:").grid(row=0, column=2, padx=5)
     max_spin = ttk.Spinbox(frame_range, from_=1, to=maximum, width=6)
-    max_spin.set(10)
+    max_spin.set(maximum)
     max_spin.grid(row=0, column=3, padx=5)
 
     ttk.Label(root, text="Select options:").pack(anchor="w", padx=35, pady=(10, 2))
