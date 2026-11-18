@@ -9,9 +9,6 @@ from threading import Thread
 
 domain = "https://lmcodequestacademy.com"
 
-template: str
-check: str
-
 def grabPage(difficulty: list[int] = [], page = 1):
     url = f"{domain}/api/quest/get-problems"
     payload = {"difficulty" : difficulty, "page" : page, "status" : [], "term" : ""}
@@ -47,32 +44,11 @@ def setupProblem(problem):
         with open(zip_file, "wb") as f:
             f.write(sample_response.content)
 
-        extract = os.path.join(path, "extract")
+        extract = os.path.join(path, "IO")
         os.makedirs(extract, exist_ok=True)
         with zipfile.ZipFile(zip_file, "r") as f:
             f.extractall(extract)
         os.remove(zip_file)
-
-        input_directory = os.path.join(path, "inputs")
-        os.makedirs(input_directory, exist_ok=True)
-        output_directory = os.path.join(path, "outputs")
-        os.makedirs(output_directory, exist_ok=True)
-
-        for file in os.listdir(extract):
-            isInput = file.endswith(".in")
-            output_path = input_directory if isInput else output_directory
-            output_prefix = "input" if isInput else "output"
-            output_num = file[0]
-            output_name = f"{output_prefix}{output_num}.txt"
-            os.rename(os.path.join(extract, file), os.path.join(output_path, output_name))
-        os.rmdir(extract)
-
-        with open(os.path.join(path, "main.py"), "w") as f:
-            f.write(template)
-
-        with open(os.path.join(path, "check.py"), "w") as f:
-            f.write(check)    
-
     else:
         raise HTTPError()
 
@@ -159,14 +135,6 @@ def filterToValue(filter: str):
         
 
 def main():
-    global template, check
-
-    with open("temps/templates/main.py", "r") as f:
-        template = f.read()
-
-    with open("temps/templates/check.py", "r") as f:
-        check = f.read()
-
     page_count = math.ceil(grabPage()["currentCount"] / 20)
 
     scope, filters = get_range_and_checkboxes(page_count)
