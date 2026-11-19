@@ -67,10 +67,10 @@ def setupProblem(problem):
             os.rename(os.path.join(extract, file), os.path.join(output_path, output_name))
         os.rmdir(extract)
 
-        with open(os.path.join(path, "main.py"), "w") as f:
+        with open(os.path.join(path, "main.py"), "w", encoding="utf-8") as f:
             f.write(template)
 
-        with open(os.path.join(path, "check.py"), "w") as f:
+        with open(os.path.join(path, "check.py"), "w", encoding="utf-8") as f:
             f.write(check)    
 
     else:
@@ -161,10 +161,10 @@ def filterToValue(filter: str):
 def main():
     global template, check
 
-    with open("temps/templates/main.py", "r") as f:
+    with open("temps/templates/main.py", "r", encoding="utf-8") as f:
         template = f.read()
 
-    with open("temps/templates/check.py", "r") as f:
+    with open("temps/templates/check.py", "r", encoding="utf-8") as f:
         check = f.read()
 
     page_count = math.ceil(grabPage()["currentCount"] / 20)
